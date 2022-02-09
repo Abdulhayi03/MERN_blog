@@ -7,12 +7,18 @@ const userRoute = require('./routes/users')
 const postRoute = require('./routes/posts')
 const categoryRoute = require('./routes/categories')
 const multer = require('multer')
+const cors = require('cors')
+const path = require('path')
+
 
 
 
 
 dotenv.config();
 app.use(express.json());
+app.use("/images", express.static(path.join(__dirname, "/images")))
+
+app.use(cors());
 
 mongoose.connect(process.env.MONGO_URL).then(console.log('Connected to MongoDB')).catch(err=>console.log(err));
 
@@ -20,7 +26,7 @@ const storage = multer.diskStorage({
     destination:(req, file, cb) => {
         cb(null, 'images')
     },filename:(req, file, cb)=>{
-        cb(null, 'mern.png')
+        cb(null, req.body.name)
     }
 })
 
